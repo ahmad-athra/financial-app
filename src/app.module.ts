@@ -2,9 +2,24 @@ import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
+import { TypeOrmModule } from '@nestjs/typeorm';
+// import { User } from './users/entities/user.entity';
 
 @Module({
-  imports: [UsersModule],
+  imports: [
+    TypeOrmModule.forRoot({
+      type: 'postgres',
+      host: 'localhost',
+      port: 5432,
+      username: 'postgres',
+      password: 'postgres',
+      database: 'financial_app',
+      autoLoadEntities: true,
+      synchronize: false, // IMPORTANT: disable in production
+      migrationsRun: false, // controlled manually
+    }),
+    UsersModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

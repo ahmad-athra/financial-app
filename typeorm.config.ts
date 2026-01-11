@@ -1,4 +1,4 @@
-import { User } from './src/users/entities/user.entity';
+import { UserEntity } from './src/users/infrastructure/persistence/orm/entities/user.entity';
 import { DataSource } from 'typeorm';
 
 export default new DataSource({
@@ -8,6 +8,6 @@ export default new DataSource({
   username: 'postgres',
   password: 'postgres',
   database: 'financial_app',
-  entities: [User],
+  entities: [UserEntity],
   migrations: ['src/migrations/*.ts'],
 });

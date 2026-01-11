@@ -1,6 +1,12 @@
 import { IsBoolean, IsEmail, IsEnum, IsNotEmpty } from 'class-validator';
-import { WalletType } from '../entities/user.entity';
+// import { WalletType } from '../../../entities/user.entity';
 
+// [TODO] Move WalletType enum to a shared location, if need to extends
+enum WalletType {
+  VISA = 'VISA',
+  MASTERCARD = 'MASTERCARD',
+  AMEX = 'AMEX',
+}
 export class CreateUserDto {
   @IsEmail()
   email: string;

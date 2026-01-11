@@ -1,26 +1,26 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { TypeOrmModule } from '@nestjs/typeorm';
+import { UsersModule } from './users/application/users.module';
+// import { TypeOrmModule } from '@nestjs/typeorm';
 // import { User } from './users/entities/user.entity';
+import { CoreModule } from './core/core.module';
+import { ApplicationBootstrapOptions } from './common/interfaces/application-bootstrap-options.interface';
+import { UsersInfrastructureModule } from './users/infrastructure/persistence/users-infrastructure.module';
 
 @Module({
-  imports: [
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'postgres',
-      database: 'financial_app',
-      autoLoadEntities: true,
-      synchronize: false, // IMPORTANT: disable in production
-      migrationsRun: false, // controlled manually
-    }),
-    UsersModule,
-  ],
+  imports: [],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  static register(options: ApplicationBootstrapOptions) {
+    return {
+      module: AppModule,
+      imports: [
+        UsersModule.withInfrastructure(UsersInfrastructureModule.use(options)),
+        CoreModule.forRoot(options),
+      ],
+    };
+  }
+}

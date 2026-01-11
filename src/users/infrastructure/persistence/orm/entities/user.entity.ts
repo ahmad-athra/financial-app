@@ -7,14 +7,8 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-export enum WalletType {
-  VISA = 'VISA',
-  MASTERCARD = 'MASTERCARD',
-  AMEX = 'AMEX',
-}
-
 @Entity('users')
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -31,14 +25,14 @@ export class User {
   @Column({ length: 100 })
   lastName: string;
 
-  @Column({ default: true })
+  @Column({ default: true, type: 'boolean' })
   isActive: boolean;
 
   @Column({ unique: true, length: 50 })
   walletId: string;
 
-  @Column({ enum: ['VISA', 'MASTERCARD', 'AMEX'], default: 'VISA' })
-  walletType: WalletType;
+  @Column()
+  walletType: string;
 
   @CreateDateColumn()
   createdAt: Date;

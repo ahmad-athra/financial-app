@@ -7,9 +7,10 @@ import { UsersModule } from './users/application/users.module';
 import { CoreModule } from './core/core.module';
 import { ApplicationBootstrapOptions } from './common/interfaces/application-bootstrap-options.interface';
 import { UsersInfrastructureModule } from './users/infrastructure/persistence/users-infrastructure.module';
+import { CqrsModule } from '@nestjs/cqrs';
 
 @Module({
-  imports: [],
+  imports: [CqrsModule.forRoot()],
   controllers: [AppController],
   providers: [AppService],
 })

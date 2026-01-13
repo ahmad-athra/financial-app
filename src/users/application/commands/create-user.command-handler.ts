@@ -1,15 +1,17 @@
-import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
+import { CommandHandler, EventBus, ICommandHandler } from '@nestjs/cqrs';
 import { CreateUserCommand } from './create-user.command';
 import { ConflictException, Logger } from '@nestjs/common';
 import { UserFactory } from 'src/users/domain/factories/user-factory';
 import { UserRepository } from '../ports/user.repository';
 import { QueryFailedError } from 'typeorm';
+import { UserCreatedEvent } from 'src/users/domain/events/user-created.event';
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserCommandHandler implements ICommandHandler<CreateUserCommand> {
   constructor(
     private readonly userRepository: UserRepository,
     private readonly userFactory: UserFactory,
+    private readonly eventBus: EventBus,
   ) {}
   private logger = new Logger(CreateUserCommandHandler.name);
 
@@ -29,7 +31,11 @@ export class CreateUserCommandHandler implements ICommandHandler<CreateUserComma
         command.walletId,
         command.walletType,
       );
-      return this.userRepository.create(user);
+      const newUser = await this.userRepository.create(user);
+
+      this.eventBus.publish(new UserCreatedEvent(user));
+
+      return newUser;
     } catch (error) {
       if (error instanceof QueryFailedError) {
         // PostgreSQL unique violation

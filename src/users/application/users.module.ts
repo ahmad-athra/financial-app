@@ -4,6 +4,7 @@ import { UserFactory } from '../domain/factories/user-factory';
 import { UsersService } from './users.service';
 import { CreateUserCommandHandler } from './commands/create-user.command-handler';
 import { GetUserQueryHandler } from './queries/get-user.query-handler';
+import { UserCreatedEventHandler } from './event-handlers/user-created.event-handler';
 
 @Module({
   imports: [],
@@ -13,6 +14,7 @@ import { GetUserQueryHandler } from './queries/get-user.query-handler';
     UserFactory,
     CreateUserCommandHandler,
     GetUserQueryHandler,
+    UserCreatedEventHandler,
   ],
 })
 export class UsersModule {
